@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.dataSourceOptios = void 0;
 const typeorm_1 = require("typeorm");
 exports.dataSourceOptios = {
-    type: "mysql",
+    type: "postgres",
     host: "localhost",
-    port: 33061,
-    username: "root",
-    password: "root",
-    database: "blog-nestjs",
+    port: 5432,
+    username: "hoadev",
+    password: "hoadev123",
+    database: "hoadev_db",
     entities: ['dist/**/*.entity.js'],
     migrations: ['dist/db/migrations/*.js'],
     synchronize: true

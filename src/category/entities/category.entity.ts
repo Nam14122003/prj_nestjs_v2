@@ -7,11 +7,11 @@ export class Category {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({nullable: true})
     name: string;
 
-    @Column()
-    dascription: string;
+    @Column({nullable: true})
+    description: string;
 
     @Column({type: "int", default: 1})
     status: number;

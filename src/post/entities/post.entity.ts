@@ -13,7 +13,7 @@ export class Post {
     @Column()
     summary: string;
 
-    @Column( {type: 'longtext'}) 
+    @Column( {type: 'text'}) 
     description: string;
     
     @Column()
