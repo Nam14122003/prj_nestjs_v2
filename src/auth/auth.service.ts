@@ -213,4 +213,13 @@ export class AuthService {
         }
         return dto.password;
     }
+
+    async checkUser(payload: {id: number, email: string}): Promise<any> {
+        const user = await this.userRepository.findOneBy({ id: payload.id })
+        if (!user) {
+            throw new BadRequestException("User không tồn tại ");
+        }
+
+        return user;
+    }
 }

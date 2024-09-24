@@ -23,6 +23,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const config_1 = require("../../helpers/config");
 const path_1 = require("path");
 const role_decorator_1 = require("../auth/decorator/role.decorator");
+const local_auth_guard_1 = require("../auth/local-auth.guard");
 let UserController = exports.UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -160,6 +161,7 @@ exports.UserController = UserController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiTags)('Users'),
     (0, common_1.Controller)('users'),
+    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

@@ -233,6 +233,13 @@ let AuthService = exports.AuthService = class AuthService {
         }
         return dto.password;
     }
+    async checkUser(payload) {
+        const user = await this.userRepository.findOneBy({ id: payload.id });
+        if (!user) {
+            throw new common_1.BadRequestException("User không tồn tại ");
+        }
+        return user;
+    }
 };
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),

@@ -48,14 +48,13 @@ export class AuthController {
     }
 
     
-    @UseGuards(LocalAuthGuard)
+
     @Post('retry-password')
     @Public()
     retryPassword(@Body() dto: UpdatePasswordAuthDto): Promise<any> { 
         return this.authService.retryPassword(dto);
     }
-
-    @UseGuards(LocalAuthGuard)
+    
     @Post('change-password')
     @Public()
     changePassword(@Body() dto: UpdatePasswordAuthDto): Promise<any> { 

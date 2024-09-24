@@ -21,4 +21,8 @@ export declare class AuthService {
     verifyActive(dto: UpdateCodeAuthDto): Promise<any>;
     retryPassword(dto: UpdatePasswordAuthDto): Promise<any>;
     changePassword(dto: UpdatePasswordAuthDto): Promise<any>;
+    checkUser(payload: {
+        id: number;
+        email: string;
+    }): Promise<any>;
 }

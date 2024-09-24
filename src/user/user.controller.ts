@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, ParseArrayPipe, Patch, Post, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseArrayPipe, Patch, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from '@/user/dto/create-user.dto';
@@ -9,10 +9,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { storageConfig } from 'helpers/config';
 import { extname } from 'path';
 import { Roles } from '@/auth/decorator/role.decorator';
+import { LocalAuthGuard } from '@/auth/local-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('Users')
 @Controller('users')
+@UseGuards(LocalAuthGuard)
 export class UserController {
     constructor(private userService: UserService){}
 
