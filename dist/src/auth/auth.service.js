@@ -82,6 +82,14 @@ let AuthService = exports.AuthService = class AuthService {
             status: 2
         });
     }
+    async validateUser(email, password) {
+        const user = await this.userRepository.findOneBy({ email });
+        if (user && user.password === password) {
+            const { password, ...result } = user;
+            return result;
+        }
+        return null;
+    }
     async login(dto) {
         const user = await this.userRepository.findOne({
             where: { email: dto.email }

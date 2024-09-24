@@ -14,21 +14,26 @@ const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../user/entities/user.entity");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
+const user_module_1 = require("../user/user.module");
+const passport_1 = require("@nestjs/passport");
+const jwt_strategy_1 = require("./jwt.strategy");
 let AuthModule = exports.AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
+            passport_1.PassportModule,
             jwt_1.JwtModule.register({
                 global: true,
-                secret: '123456',
+                secret: process.env.SECRET,
                 signOptions: { expiresIn: '1h' }
             }),
-            config_1.ConfigModule
+            config_1.ConfigModule,
+            user_module_1.UserModule
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService]
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy]
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

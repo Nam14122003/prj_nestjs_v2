@@ -1,10 +1,11 @@
-import { Body, Controller, Post, SetMetadata, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, SetMetadata, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CodeAuthDto, RegisterUserDto, UpdateCodeAuthDto, UpdatePasswordAuthDto } from '@/auth/dto/register-user.dto';
 import { AuthService } from '@/auth/auth.service';
 import { LoginUserDto } from '@/auth/dto/login-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from '@/auth/decorator/public.decorator';
 import { MailerService } from '@nestjs-modules/mailer';
+import { LocalAuthGuard } from '@/auth/local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -47,12 +48,14 @@ export class AuthController {
     }
 
     
+    @UseGuards(LocalAuthGuard)
     @Post('retry-password')
     @Public()
     retryPassword(@Body() dto: UpdatePasswordAuthDto): Promise<any> { 
         return this.authService.retryPassword(dto);
     }
 
+    @UseGuards(LocalAuthGuard)
     @Post('change-password')
     @Public()
     changePassword(@Body() dto: UpdatePasswordAuthDto): Promise<any> { 

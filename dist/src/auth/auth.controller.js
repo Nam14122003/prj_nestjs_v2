@@ -20,6 +20,7 @@ const login_user_dto_1 = require("./dto/login-user.dto");
 const swagger_1 = require("@nestjs/swagger");
 const public_decorator_1 = require("./decorator/public.decorator");
 const mailer_1 = require("@nestjs-modules/mailer");
+const local_auth_guard_1 = require("./local-auth.guard");
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService, mailerService) {
         this.authService = authService;
@@ -94,6 +95,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "verifyActive", null);
 __decorate([
+    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
     (0, common_1.Post)('retry-password'),
     (0, public_decorator_1.Public)(),
     __param(0, (0, common_1.Body)()),
@@ -102,6 +104,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "retryPassword", null);
 __decorate([
+    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
     (0, common_1.Post)('change-password'),
     (0, public_decorator_1.Public)(),
     __param(0, (0, common_1.Body)()),
