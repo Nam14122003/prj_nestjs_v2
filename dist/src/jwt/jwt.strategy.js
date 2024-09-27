@@ -13,7 +13,7 @@ exports.JwtStrategy = void 0;
 const passport_jwt_1 = require("passport-jwt");
 const passport_1 = require("@nestjs/passport");
 const common_1 = require("@nestjs/common");
-const auth_service_1 = require("../auth/auth.service");
+const auth_service_1 = require("../modules/auth/auth.service");
 let JwtStrategy = exports.JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
     constructor(authService) {
         super({
@@ -25,7 +25,7 @@ let JwtStrategy = exports.JwtStrategy = class JwtStrategy extends (0, passport_1
     }
     async validate(payload) {
         const user = await this.authService.checkUser(payload);
-        return { userId: payload.sub, email: payload.email };
+        return user;
     }
 };
 exports.JwtStrategy = JwtStrategy = __decorate([

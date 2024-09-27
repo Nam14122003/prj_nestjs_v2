@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
-const app_module_1 = require("./app.module");
+const app_module_1 = require("./modules/app/app.module");
 const swagger_1 = require("@nestjs/swagger");
 const path_1 = require("path");
 const config_1 = require("@nestjs/config");
