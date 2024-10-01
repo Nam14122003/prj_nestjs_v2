@@ -6,6 +6,8 @@ import { DeleteResult, Like, Repository, UpdateOptions, UpdateResult } from 'typ
 import { User } from '@/modules/user/entities/user.entity';
 import { FilterPostDto } from '@/modules/post/dto/filter-post.dto';
 import { UpdatePostDto } from '@/modules/post/dto/update-post.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+
 
 @Injectable()
 export class PostService {
@@ -111,7 +113,7 @@ export class PostService {
         return await this.postRepository.update(id, dto)
     }
 
-    async delete(id: number): Promise<DeleteResult> {
+    async delete(id : number): Promise<DeleteResult> {
         return await this.postRepository.delete(id);
     }
 }

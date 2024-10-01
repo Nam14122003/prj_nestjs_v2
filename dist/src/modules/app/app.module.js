@@ -24,6 +24,7 @@ const user_entity_1 = require("../user/entities/user.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
 const schedule_1 = require("@nestjs/schedule");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -59,7 +60,8 @@ exports.AppModule = AppModule = __decorate([
                 }),
                 inject: [config_1.ConfigService]
             }),
-            schedule_1.ScheduleModule.forRoot()
+            schedule_1.ScheduleModule.forRoot(),
+            event_emitter_1.EventEmitterModule.forRoot()
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService,

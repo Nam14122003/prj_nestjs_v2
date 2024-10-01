@@ -17,6 +17,7 @@ const config_1 = require("@nestjs/config");
 const user_module_1 = require("../user/user.module");
 const passport_1 = require("@nestjs/passport");
 const jwt_strategy_1 = require("./jwt/jwt.strategy");
+const send_mail_listener_1 = require("../listeners/send-mail.listener");
 let AuthModule = exports.AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule = __decorate([
@@ -33,7 +34,7 @@ exports.AuthModule = AuthModule = __decorate([
             user_module_1.UserModule
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy]
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, send_mail_listener_1.SendMailListener]
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

@@ -5,12 +5,15 @@ import { LoginUserDto } from '@/modules/auth/dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
+import { EventEmitter2 } from "@nestjs/event-emitter";
 export declare class AuthService {
     private userRepository;
     private jwtService;
     private configService;
     private mailerService;
-    constructor(userRepository: Repository<User>, jwtService: JwtService, configService: ConfigService, mailerService: MailerService);
+    private eventEmitter;
+    constructor(userRepository: Repository<User>, jwtService: JwtService, configService: ConfigService, mailerService: MailerService, eventEmitter: EventEmitter2);
+    private readonly logger;
     register(dto: RegisterUserDto): Promise<User>;
     validateUser(email: string, password: string): Promise<any>;
     login(dto: LoginUserDto): Promise<any>;
@@ -25,4 +28,5 @@ export declare class AuthService {
         id: number;
         email: string;
     }): Promise<any>;
+    handleCron(): Promise<void>;
 }

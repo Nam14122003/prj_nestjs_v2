@@ -17,15 +17,8 @@
         </div>
         <div style="padding: 24px; background-color: #ffffff;">
             <p style="margin-top: 0; margin-bottom: 24px;">Hello {{name}},</p>
-            <p style="margin-top: 0; margin-bottom: 24px;">Thank you for registering with @ngocnam. To activate your
-                account, please use the following activation code:</p>
-            <h2
-                style="font-size: 20px; font-weight: 700; line-height: 1.25; margin-top: 0; margin-bottom: 15px; text-align: center;">
-                {{activationCode}}</h2>
-            <p style="margin-top: 0; margin-bottom: 24px;">Please enter this code on the activation page within the next
-                5 minutes.</p>
-            <p style="margin-top: 0; margin-bottom: 24px;">If you did not register for a @ngocnam account, please
-                ignore this email.</p>
+            <p style="margin-top: 0; margin-bottom: 24px;">Thank you for used with @ngocnam. If you haven't posted an article yet today, please post one. </p>
+            <p style="margin-top: 0; margin-bottom: 24px;">If you did post an article for a @ngocnam account, please ignore this email.</p>
         </div>
     </div>
 </body>

@@ -1,4 +1,4 @@
-import {  BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {BadRequestException, HttpException, HttpStatus, Injectable, Logger} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -11,13 +11,23 @@ import { v4 as uuidv4 } from 'uuid';
 import { authenticator, totp, hotp } from 'otplib';
 import moment from 'moment';
 import { MailerService } from '@nestjs-modules/mailer';
+import {Cron} from "@nestjs/schedule";
+import {RemindDto} from "@/modules/auth/dto/remind.dto";
+import {EventEmitter2, OnEvent} from "@nestjs/event-emitter";
+import * as events from "node:events";
+import {SendMailListener} from "@/modules/listeners/send-mail.listener";
 
 @Injectable()
 export class AuthService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>, 
     private jwtService: JwtService, 
     private configService: ConfigService,
-    private mailerService: MailerService) {}
+    private mailerService: MailerService,
+    private eventEmitter: EventEmitter2
+    ) {}
+
+    private readonly logger = new Logger(AuthService.name);
+
     async register(dto : RegisterUserDto): Promise<User> {
         const hashPassword = await this.hashPassword(dto.password);
         const codeId = uuidv4();
@@ -45,15 +55,15 @@ export class AuthService {
             })
     }
 
+
     async validateUser(email: string, password: string): Promise<any> {
-        const user = await this.userRepository.findOneBy({email});
-        if (user && user.password === password) {
-          const { password, ...result } = user;
-          return result;
-        }
-        return null;
-      }
-    
+    const user = await this.userRepository.findOneBy({email});
+    if (user && user.password === password) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
 
     async login(dto: LoginUserDto): Promise<any> {
         const user = await this.userRepository.findOne(
@@ -222,4 +232,10 @@ export class AuthService {
 
         return user;
     }
+
+    @Cron('* * * * * *')
+    async handleCron() {
+        this.eventEmitter.emit('send mail', 'Post article')
+    }
+
 }

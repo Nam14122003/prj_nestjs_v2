@@ -14,13 +14,16 @@ import { AuthGuard } from '@/modules/auth/jwt/auth.guard';
 import { User } from '@/modules/user/entities/user.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { ScheduleModule } from '@nestjs/schedule';
+import {ScheduleModule} from "@nestjs/schedule";
+import {EventEmitter} from "typeorm/browser/platform/BrowserPlatformTools";
+import {EventEmitterModule} from "@nestjs/event-emitter";
+
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dataSourceOptios), 
     UserModule, AuthModule, ConfigModule.forRoot(), 
-    PostModule, CategoryModule, 
+    PostModule, CategoryModule,
     TypeOrmModule.forFeature([User]),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
@@ -50,7 +53,8 @@ import { ScheduleModule } from '@nestjs/schedule';
       }),
       inject: [ConfigService]
       }),
-    ScheduleModule.forRoot()    
+      ScheduleModule.forRoot(),
+      EventEmitterModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService,
