@@ -23,7 +23,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const config_1 = require("../../../helpers/config");
 const path_1 = require("path");
 const role_decorator_1 = require("../auth/decorator/role.decorator");
-const local_auth_guard_1 = require("../auth/local-auth.guard");
+const local_auth_guard_1 = require("../auth/jwt/local-auth.guard");
 let UserController = exports.UserController = class UserController {
     constructor(userService) {
         this.userService = userService;

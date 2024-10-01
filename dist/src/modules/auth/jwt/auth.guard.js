@@ -18,7 +18,7 @@ const config_1 = require("@nestjs/config");
 const core_1 = require("@nestjs/core");
 const jwt_1 = require("@nestjs/jwt");
 const typeorm_1 = require("@nestjs/typeorm");
-const user_entity_1 = require("../user/entities/user.entity");
+const user_entity_1 = require("../../user/entities/user.entity");
 const typeorm_2 = require("typeorm");
 let AuthGuard = exports.AuthGuard = class AuthGuard {
     constructor(jwtService, configService, userRepository, reflector) {

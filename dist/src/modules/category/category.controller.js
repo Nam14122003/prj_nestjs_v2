@@ -14,10 +14,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryController = void 0;
 const common_1 = require("@nestjs/common");
+const category_entity_1 = require("./entities/category.entity");
 const category_service_1 = require("./category.service");
 const swagger_1 = require("@nestjs/swagger");
-const auth_guard_1 = require("../auth/auth.guard");
+const auth_guard_1 = require("../auth/jwt/auth.guard");
 const create_category_dto_1 = require("./dto/create-category.dto");
+const update_categry_dto_1 = require("./dto/update-categry.dto");
 let CategoryController = exports.CategoryController = class CategoryController {
     constructor(categoryService) {
         this.categoryService = categoryService;
@@ -25,8 +27,17 @@ let CategoryController = exports.CategoryController = class CategoryController {
     async createCategory(dto) {
         return this.categoryService.create(dto);
     }
-    findAll() {
-        return this.categoryService.findAll();
+    findAll(dto) {
+        return this.categoryService.getList(dto);
+    }
+    findOne(id) {
+        return this.categoryService.getDetail(id);
+    }
+    update(id, dto) {
+        return this.categoryService.update(id, dto);
+    }
+    delete(id) {
+        return this.categoryService.delete(id);
     }
 };
 __decorate([
@@ -37,16 +48,38 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "createCategory", null);
 __decorate([
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [category_entity_1.Category]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_categry_dto_1.UpdateCategoryDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], CategoryController.prototype, "delete", null);
 exports.CategoryController = CategoryController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiTags)('Categories'),
     (0, common_1.Controller)('categories'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __metadata("design:paramtypes", [category_service_1.CategoryService])
 ], CategoryController);
 //# sourceMappingURL=category.controller.js.map

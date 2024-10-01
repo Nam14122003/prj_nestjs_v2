@@ -18,11 +18,12 @@ const config_1 = require("@nestjs/config");
 const post_module_1 = require("../post/post.module");
 const category_module_1 = require("../category/category.module");
 const core_1 = require("@nestjs/core");
-const roles_guard_1 = require("../auth/roles.guard");
-const auth_guard_1 = require("../auth/auth.guard");
+const roles_guard_1 = require("../auth/jwt/roles.guard");
+const auth_guard_1 = require("../auth/jwt/auth.guard");
 const user_entity_1 = require("../user/entities/user.entity");
 const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
+const schedule_1 = require("@nestjs/schedule");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -57,7 +58,8 @@ exports.AppModule = AppModule = __decorate([
                     },
                 }),
                 inject: [config_1.ConfigService]
-            })
+            }),
+            schedule_1.ScheduleModule.forRoot()
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService,

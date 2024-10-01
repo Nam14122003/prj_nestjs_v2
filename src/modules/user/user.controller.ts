@@ -9,7 +9,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { storageConfig } from 'helpers/config';
 import { extname } from 'path';
 import { Roles } from '@/modules/auth/decorator/role.decorator';
-import { LocalAuthGuard } from '@/modules/auth/local-auth.guard';
+import { LocalAuthGuard } from '@/modules/auth/jwt/local-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('Users')

@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const category_entity_1 = require("./entities/category.entity");
 const typeorm_2 = require("typeorm");
-const baseService_1 = require("../../base/baseService");
-let CategoryService = exports.CategoryService = class CategoryService extends baseService_1.BaseService {
+const base_service_1 = require("../../base/base.service");
+let CategoryService = exports.CategoryService = class CategoryService extends base_service_1.BaseService {
     constructor(categoryRepository) {
         super(categoryRepository);
         this.categoryRepository = categoryRepository;
@@ -31,11 +31,8 @@ let CategoryService = exports.CategoryService = class CategoryService extends ba
         }
         return this.actionPostCreate(dto);
     }
-    async actionPostCreate(record) {
-        return record;
-    }
-    async findAll() {
-        return await this.categoryRepository.find();
+    async actionPostDelete() {
+        return postMessage(`Đã xóa category ${category_entity_1.Category.name} thành công!`);
     }
 };
 exports.CategoryService = CategoryService = __decorate([

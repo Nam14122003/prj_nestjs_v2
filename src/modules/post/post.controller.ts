@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post,
 import { CreatePostDto } from '@/modules/post/dto/create-post.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storageConfig } from 'helpers/config';
-import { AuthGuard } from '@/modules/auth/auth.guard';
+import { AuthGuard } from '@/modules/auth/jwt/auth.guard';
 import { extname } from 'path';
 import { PostService } from '@/modules/post/post.service';
 import { FilterPostDto } from '@/modules/post/dto/filter-post.dto';

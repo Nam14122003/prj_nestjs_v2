@@ -9,11 +9,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PostModule } from '@/modules/post/post.module';
 import { CategoryModule } from '@/modules/category/category.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from '@/modules/auth/roles.guard';
-import { AuthGuard } from '@/modules/auth/auth.guard';
+import { RolesGuard } from '@/modules/auth/jwt/roles.guard';
+import { AuthGuard } from '@/modules/auth/jwt/auth.guard';
 import { User } from '@/modules/user/entities/user.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -48,8 +49,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         },
       }),
       inject: [ConfigService]
-      })
-      
+      }),
+    ScheduleModule.forRoot()    
   ],
   controllers: [AppController],
   providers: [AppService,

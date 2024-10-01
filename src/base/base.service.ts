@@ -22,20 +22,20 @@ export class BaseService<T> {
         return this.actionPostCreate(record);
     }
 
-    async actionPreList(dto: any) {
+    async actionPreGetList(dto: any) {
         return dto;
     }
 
-    async actionPostList(records: T[]) {
+    async actionGetList(records: T[]) {
         return records;
     }
 
     async getList(dto: any): Promise<T[]> {
-        const handleDto = await this.actionPreList(dto);
+        const handleDto = await this.actionPreGetList(dto);
 
         const records = await this.repository.find(handleDto);
 
-        return this.actionPostList(records);
+        return this.actionGetList(records);
     }
 
     async actionPreDetail(id: number) {
@@ -84,6 +84,6 @@ export class BaseService<T> {
 
         await this.repository.delete(handleId);
 
-        return this.actionPostDelete()
+        return this.actionPostDelete();
     }
 }

@@ -4,8 +4,8 @@ export declare class BaseService<T> {
     actionPreCreate(dto: Partial<T>): Promise<Partial<T>>;
     actionPostCreate(record: T): Promise<T>;
     create(dto: Partial<T>): Promise<T>;
-    actionPreList(dto: any): Promise<any>;
-    actionPostList(records: T[]): Promise<T[]>;
+    actionPreGetList(dto: any): Promise<any>;
+    actionGetList(records: T[]): Promise<T[]>;
     getList(dto: any): Promise<T[]>;
     actionPreDetail(id: number): Promise<number>;
     actionPostDetail(record: T): Promise<T>;

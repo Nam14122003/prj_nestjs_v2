@@ -26,16 +26,16 @@ let BaseService = exports.BaseService = class BaseService {
         const record = await this.repository.save(handleDto);
         return this.actionPostCreate(record);
     }
-    async actionPreList(dto) {
+    async actionPreGetList(dto) {
         return dto;
     }
-    async actionPostList(records) {
+    async actionGetList(records) {
         return records;
     }
     async getList(dto) {
-        const handleDto = await this.actionPreList(dto);
+        const handleDto = await this.actionPreGetList(dto);
         const records = await this.repository.find(handleDto);
-        return this.actionPostList(records);
+        return this.actionGetList(records);
     }
     async actionPreDetail(id) {
         return id;
@@ -75,4 +75,4 @@ exports.BaseService = BaseService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [Object])
 ], BaseService);
-//# sourceMappingURL=baseService.js.map
+//# sourceMappingURL=base.service.js.map
