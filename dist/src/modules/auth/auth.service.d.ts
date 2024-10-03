@@ -13,7 +13,6 @@ export declare class AuthService {
     private mailerService;
     private eventEmitter;
     constructor(userRepository: Repository<User>, jwtService: JwtService, configService: ConfigService, mailerService: MailerService, eventEmitter: EventEmitter2);
-    private readonly logger;
     register(dto: RegisterUserDto): Promise<User>;
     validateUser(email: string, password: string): Promise<any>;
     login(dto: LoginUserDto): Promise<any>;

@@ -8,8 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const data_source_1 = require("../../../db/data-source");
 const user_module_1 = require("../user/user.module");
@@ -25,6 +23,7 @@ const mailer_1 = require("@nestjs-modules/mailer");
 const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handlebars.adapter");
 const schedule_1 = require("@nestjs/schedule");
 const event_emitter_1 = require("@nestjs/event-emitter");
+const bull_1 = require("@nestjs/bull");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -61,10 +60,15 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService]
             }),
             schedule_1.ScheduleModule.forRoot(),
-            event_emitter_1.EventEmitterModule.forRoot()
+            event_emitter_1.EventEmitterModule.forRoot(),
+            bull_1.BullModule.forRoot({
+                redis: {
+                    host: 'localhost',
+                    port: 6379,
+                },
+            })
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService,
+        providers: [
             {
                 provide: core_1.APP_GUARD,
                 useClass: auth_guard_1.AuthGuard

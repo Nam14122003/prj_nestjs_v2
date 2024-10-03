@@ -37,7 +37,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var AuthService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
@@ -53,14 +52,13 @@ const moment_1 = __importDefault(require("moment"));
 const mailer_1 = require("@nestjs-modules/mailer");
 const schedule_1 = require("@nestjs/schedule");
 const event_emitter_1 = require("@nestjs/event-emitter");
-let AuthService = exports.AuthService = AuthService_1 = class AuthService {
+let AuthService = exports.AuthService = class AuthService {
     constructor(userRepository, jwtService, configService, mailerService, eventEmitter) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.configService = configService;
         this.mailerService = mailerService;
         this.eventEmitter = eventEmitter;
-        this.logger = new common_1.Logger(AuthService_1.name);
     }
     async register(dto) {
         const hashPassword = await this.hashPassword(dto.password);
@@ -250,12 +248,12 @@ let AuthService = exports.AuthService = AuthService_1 = class AuthService {
     }
 };
 __decorate([
-    (0, schedule_1.Cron)('* * * * * *'),
+    (0, schedule_1.Cron)('0 * */24 * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AuthService.prototype, "handleCron", null);
-exports.AuthService = AuthService = AuthService_1 = __decorate([
+exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository,

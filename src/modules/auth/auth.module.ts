@@ -8,7 +8,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from '@/modules/user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@/modules/auth/jwt/jwt.strategy';
-import {SendMailListener} from "@/modules/listeners/send-mail.listener";
+import {SendMailListener} from "@/modules/auth/listeners/send-mail.listener";
+import {BullModule} from "@nestjs/bull";
+import {SendMailProcessor} from "@/modules/auth/listeners/send-mail.processor";
 
 @Module({
   imports: [  
@@ -20,9 +22,12 @@ import {SendMailListener} from "@/modules/listeners/send-mail.listener";
       signOptions:{expiresIn:'1h'}
     }),
     ConfigModule,
-    UserModule
+    UserModule,
+    BullModule.registerQueue({
+      name: 'sendMailQueue',
+    })
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, SendMailListener]
+  providers: [AuthService, JwtStrategy, SendMailListener, SendMailProcessor]
 })
 export class AuthModule {}

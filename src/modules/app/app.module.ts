@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from '@/modules/app/app.controller';
-import { AppService } from '@/modules/app/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptios } from 'db/data-source';
 import { UserModule } from '@/modules/user/user.module';
@@ -15,8 +13,8 @@ import { User } from '@/modules/user/entities/user.entity';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import {ScheduleModule} from "@nestjs/schedule";
-import {EventEmitter} from "typeorm/browser/platform/BrowserPlatformTools";
 import {EventEmitterModule} from "@nestjs/event-emitter";
+import {BullModule} from "@nestjs/bull";
 
 
 @Module({
@@ -53,11 +51,16 @@ import {EventEmitterModule} from "@nestjs/event-emitter";
       }),
       inject: [ConfigService]
       }),
-      ScheduleModule.forRoot(),
-      EventEmitterModule.forRoot()
+    ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    })
   ],
-  controllers: [AppController],
-  providers: [AppService,
+  providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard  

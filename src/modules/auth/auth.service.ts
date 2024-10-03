@@ -8,25 +8,25 @@ import { LoginUserDto } from '@/modules/auth/dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
-import { authenticator, totp, hotp } from 'otplib';
+import { authenticator, totp } from 'otplib';
 import moment from 'moment';
 import { MailerService } from '@nestjs-modules/mailer';
 import {Cron} from "@nestjs/schedule";
-import {RemindDto} from "@/modules/auth/dto/remind.dto";
-import {EventEmitter2, OnEvent} from "@nestjs/event-emitter";
-import * as events from "node:events";
-import {SendMailListener} from "@/modules/listeners/send-mail.listener";
+import {EventEmitter2} from "@nestjs/event-emitter";
+
+
+
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectRepository(User) private userRepository: Repository<User>, 
-    private jwtService: JwtService, 
+    constructor(@InjectRepository(User) private userRepository: Repository<User>,
+
+    private jwtService: JwtService,
     private configService: ConfigService,
     private mailerService: MailerService,
-    private eventEmitter: EventEmitter2
+    private eventEmitter: EventEmitter2,
     ) {}
 
-    private readonly logger = new Logger(AuthService.name);
 
     async register(dto : RegisterUserDto): Promise<User> {
         const hashPassword = await this.hashPassword(dto.password);
@@ -46,15 +46,14 @@ export class AuthService {
         })
         return await this.userRepository.save(
             {
-                ...dto, 
-                refresh_token: "refresh_token_string", 
-                password: hashPassword, 
-                codeId: secret, 
+                ...dto,
+                refresh_token: "refresh_token_string",
+                password: hashPassword,
+                codeId: secret,
                 codeExpired: codeExpired ,
                 status: 2
             })
     }
-
 
     async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userRepository.findOneBy({email});
@@ -81,7 +80,7 @@ export class AuthService {
         if (user.status == 2) {
             throw new BadRequestException("Tài khoản chưa được kích hoạt!")
         }
-        //Generate access token and refresh token 
+        //Generate access token and refresh token
         const payload = {id:user.id, email:user.email};
         return this.generateToken(payload);
     }
@@ -100,7 +99,7 @@ export class AuthService {
             }
         }
         catch(error) {
-            throw new HttpException('Refresh token is not vaild', HttpStatus.BAD_REQUEST)   
+            throw new HttpException('Refresh token is not vaild', HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -124,7 +123,7 @@ export class AuthService {
         const hash = await bcrypt.hash(password, salt);
         return hash ;
     }
-    
+
     async checkCode(dto: CodeAuthDto): Promise<any>{
         const user = await this.userRepository.findOneBy({ id: +(dto.id), codeId: dto.codeId})
         if (!user) {
@@ -233,9 +232,8 @@ export class AuthService {
         return user;
     }
 
-    @Cron('* * * * * *')
+    @Cron('0 * */24 * * *') // Chạy vào lúc 00:00 mỗi ngày
     async handleCron() {
-        this.eventEmitter.emit('send mail', 'Post article')
+        this.eventEmitter.emit('send mail', 'Post article');
     }
-
 }

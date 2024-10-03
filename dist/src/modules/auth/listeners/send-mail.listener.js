@@ -15,28 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SendMailListener = void 0;
 const common_1 = require("@nestjs/common");
 const event_emitter_1 = require("@nestjs/event-emitter");
-const mailer_1 = require("@nestjs-modules/mailer");
 const typeorm_1 = require("@nestjs/typeorm");
-const user_entity_1 = require("../user/entities/user.entity");
+const user_entity_1 = require("../../user/entities/user.entity");
 const typeorm_2 = require("typeorm");
+const bull_1 = require("@nestjs/bull");
 let SendMailListener = exports.SendMailListener = class SendMailListener {
-    constructor(userRepository, mailerService) {
+    constructor(userRepository, sendMailQueue) {
         this.userRepository = userRepository;
-        this.mailerService = mailerService;
+        this.sendMailQueue = sendMailQueue;
     }
     async handleOrderCreatedEvent(payload) {
-        const users = await this.userRepository.find();
-        for (const user of users) {
-            this.mailerService
-                .sendMail({
-                to: user.email,
-                subject: 'Activate Your Account at ngocnam',
-                template: 'remind',
-                context: {
-                    name: user.lastName
-                }
-            });
-        }
+        await this.sendMailQueue.add('sendMailJob', {
+            payload,
+        });
     }
 };
 __decorate([
@@ -48,7 +39,7 @@ __decorate([
 exports.SendMailListener = SendMailListener = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
-        mailer_1.MailerService])
+    __param(1, (0, bull_1.InjectQueue)('sendMailQueue')),
+    __metadata("design:paramtypes", [typeorm_2.Repository, Object])
 ], SendMailListener);
 //# sourceMappingURL=send-mail.listener.js.map

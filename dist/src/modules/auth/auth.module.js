@@ -17,7 +17,9 @@ const config_1 = require("@nestjs/config");
 const user_module_1 = require("../user/user.module");
 const passport_1 = require("@nestjs/passport");
 const jwt_strategy_1 = require("./jwt/jwt.strategy");
-const send_mail_listener_1 = require("../listeners/send-mail.listener");
+const send_mail_listener_1 = require("./listeners/send-mail.listener");
+const bull_1 = require("@nestjs/bull");
+const send_mail_processor_1 = require("./listeners/send-mail.processor");
 let AuthModule = exports.AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule = __decorate([
@@ -31,10 +33,13 @@ exports.AuthModule = AuthModule = __decorate([
                 signOptions: { expiresIn: '1h' }
             }),
             config_1.ConfigModule,
-            user_module_1.UserModule
+            user_module_1.UserModule,
+            bull_1.BullModule.registerQueue({
+                name: 'sendMailQueue',
+            })
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, send_mail_listener_1.SendMailListener]
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, send_mail_listener_1.SendMailListener, send_mail_processor_1.SendMailProcessor]
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map
