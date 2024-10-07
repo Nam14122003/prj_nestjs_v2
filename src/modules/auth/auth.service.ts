@@ -232,8 +232,8 @@ export class AuthService {
         return user;
     }
 
-    @Cron('0 * */24 * * *') // Chạy vào lúc 00:00 mỗi ngày
-    async handleCron() {
-        this.eventEmitter.emit('send mail', 'Post article');
-    }
+    // @Cron('0 * */24 * * *') // Chạy vào lúc 00:00 mỗi ngày
+    // async handleCron() {
+    //     this.eventEmitter.emit('send mail', 'Post article');
+    // }
 }

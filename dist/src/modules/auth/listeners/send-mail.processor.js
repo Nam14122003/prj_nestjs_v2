@@ -39,12 +39,6 @@ let SendMailProcessor = exports.SendMailProcessor = class SendMailProcessor {
         console.log(job);
     }
 };
-__decorate([
-    (0, bull_1.Process)('sendMailJob'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], SendMailProcessor.prototype, "handleSendMailJob", null);
 exports.SendMailProcessor = SendMailProcessor = __decorate([
     (0, bull_1.Processor)('sendMailQueue'),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),

@@ -12,7 +12,7 @@ export class SendMailProcessor {
         private mailerService: MailerService,
     ) {}
 
-    @Process('sendMailJob')
+    // @Process('sendMailJob')
     async handleSendMailJob(job: Job<unknown>) {
         console.log(job.data)
         const users = await this.userRepository.find();

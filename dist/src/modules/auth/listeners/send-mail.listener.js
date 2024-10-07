@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SendMailListener = void 0;
 const common_1 = require("@nestjs/common");
-const event_emitter_1 = require("@nestjs/event-emitter");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../../user/entities/user.entity");
 const typeorm_2 = require("typeorm");
@@ -30,12 +29,6 @@ let SendMailListener = exports.SendMailListener = class SendMailListener {
         });
     }
 };
-__decorate([
-    (0, event_emitter_1.OnEvent)('send mail'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], SendMailListener.prototype, "handleOrderCreatedEvent", null);
 exports.SendMailListener = SendMailListener = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),

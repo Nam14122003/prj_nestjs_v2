@@ -14,6 +14,8 @@ const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const post_entity_1 = require("./entities/post.entity");
 const user_entity_1 = require("../user/entities/user.entity");
+const cloudinary_provider_1 = require("../../cloudinary/cloudinary.provider");
+const cloudinary_service_1 = require("../../cloudinary/cloudinary.service");
 let PostModule = exports.PostModule = class PostModule {
 };
 exports.PostModule = PostModule = __decorate([
@@ -23,7 +25,7 @@ exports.PostModule = PostModule = __decorate([
             config_1.ConfigModule
         ],
         controllers: [post_controller_1.PostController],
-        providers: [post_service_1.PostService]
+        providers: [post_service_1.PostService, cloudinary_provider_1.CloudinaryProvider, cloudinary_service_1.CloudinaryService]
     })
 ], PostModule);
 //# sourceMappingURL=post.module.js.map

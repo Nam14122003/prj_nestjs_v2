@@ -14,7 +14,7 @@ export class SendMailListener {
         @InjectQueue('sendMailQueue') private sendMailQueue: Queue,    ) {
     }
 
-    @OnEvent('send mail')
+    // @OnEvent('send mail')
     async handleOrderCreatedEvent(payload: string) {
         await this.sendMailQueue.add('sendMailJob', {
             payload,

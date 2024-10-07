@@ -4,9 +4,11 @@ import { PostService } from '@/modules/post/post.service';
 import { FilterPostDto } from '@/modules/post/dto/filter-post.dto';
 import { Post as PostEntity } from "@/modules/post/entities/post.entity";
 import { UpdatePostDto } from '@/modules/post/dto/update-post.dto';
+import { CloudinaryService } from "@/cloudinary/cloudinary.service";
 export declare class PostController {
     private postService;
-    constructor(postService: PostService);
+    private readonly cloudinaryService;
+    constructor(postService: PostService, cloudinaryService: CloudinaryService);
     create(req: any, createPostDto: CreatePostDto, file: Express.Multer.File): Promise<PostEntity>;
     findAll(query: FilterPostDto): Promise<any>;
     findDetail(id: string): Promise<PostEntity>;
@@ -15,4 +17,8 @@ export declare class PostController {
     ckeUpload(data: any, file: Express.Multer.File): {
         url: string;
     };
+    uploadImage(file: Express.Multer.File): Promise<{
+        message: string;
+        url: import("cloudinary").UploadApiResponse | import("cloudinary").UploadApiErrorResponse;
+    }>;
 }

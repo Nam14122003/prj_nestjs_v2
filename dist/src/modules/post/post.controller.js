@@ -23,9 +23,12 @@ const post_service_1 = require("./post.service");
 const filter_post_dto_1 = require("./dto/filter-post.dto");
 const update_post_dto_1 = require("./dto/update-post.dto");
 const swagger_1 = require("@nestjs/swagger");
+const cloudinary_service_1 = require("../../cloudinary/cloudinary.service");
+const cloudinary_multer_1 = require("../../cloudinary/cloudinary.multer");
 let PostController = exports.PostController = class PostController {
-    constructor(postService) {
+    constructor(postService, cloudinaryService) {
         this.postService = postService;
+        this.cloudinaryService = cloudinaryService;
     }
     create(req, createPostDto, file) {
         if (req.fileValidationError) {
@@ -57,6 +60,13 @@ let PostController = exports.PostController = class PostController {
     ckeUpload(data, file) {
         return {
             'url': `ckeditor/${file.filename}`
+        };
+    }
+    async uploadImage(file) {
+        const result = await this.cloudinaryService.uploadImage(file);
+        return {
+            message: 'Image uploaded successfully!',
+            url: result,
         };
     }
 };
@@ -195,10 +205,19 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "ckeUpload", null);
+__decorate([
+    (0, common_1.Post)('images'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', { storage: cloudinary_multer_1.storage })),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "uploadImage", null);
 exports.PostController = PostController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiTags)('Posts'),
     (0, common_1.Controller)('posts'),
-    __metadata("design:paramtypes", [post_service_1.PostService])
+    __metadata("design:paramtypes", [post_service_1.PostService,
+        cloudinary_service_1.CloudinaryService])
 ], PostController);
 //# sourceMappingURL=post.controller.js.map

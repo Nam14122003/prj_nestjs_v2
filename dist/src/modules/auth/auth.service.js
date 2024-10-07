@@ -50,7 +50,6 @@ const uuid_1 = require("uuid");
 const otplib_1 = require("otplib");
 const moment_1 = __importDefault(require("moment"));
 const mailer_1 = require("@nestjs-modules/mailer");
-const schedule_1 = require("@nestjs/schedule");
 const event_emitter_1 = require("@nestjs/event-emitter");
 let AuthService = exports.AuthService = class AuthService {
     constructor(userRepository, jwtService, configService, mailerService, eventEmitter) {
@@ -243,16 +242,7 @@ let AuthService = exports.AuthService = class AuthService {
         }
         return user;
     }
-    async handleCron() {
-        this.eventEmitter.emit('send mail', 'Post article');
-    }
 };
-__decorate([
-    (0, schedule_1.Cron)('0 * */24 * * *'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], AuthService.prototype, "handleCron", null);
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),

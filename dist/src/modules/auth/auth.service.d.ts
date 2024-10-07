@@ -27,5 +27,4 @@ export declare class AuthService {
         id: number;
         email: string;
     }): Promise<any>;
-    handleCron(): Promise<void>;
 }

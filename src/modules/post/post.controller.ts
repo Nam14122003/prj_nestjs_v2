@@ -9,11 +9,17 @@ import { FilterPostDto } from '@/modules/post/dto/filter-post.dto';
 import { Post as PostEntity} from "@/modules/post/entities/post.entity"
 import { UpdatePostDto } from '@/modules/post/dto/update-post.dto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {CloudinaryService} from "@/cloudinary/cloudinary.service";
+import {storage} from '@/cloudinary/cloudinary.multer'; // Import storage đã được cấu hình
+
 @ApiBearerAuth()
 @ApiTags('Posts')
 @Controller('posts')
 export class PostController {
-    constructor(private postService: PostService){}
+    constructor(
+        private postService: PostService,
+        private readonly cloudinaryService: CloudinaryService
+    ){}
     @UseGuards(AuthGuard)
     @UsePipes(ValidationPipe)
     @Post()
@@ -117,33 +123,44 @@ export class PostController {
     }
 
 
-    // Upload image in description
-    @Post('cke-upload')
-    @UseInterceptors(FileInterceptor('upload', {
-        storage:storageConfig('ckeditor'),
-        fileFilter:(req, file, cb) => {
-            const ext = extname(file.originalname);
-            const allowedExtArr = ['.jpg', '.png', '.jpeg'];
-            if(!allowedExtArr.includes(ext)) {
-                req.fileValidationError = `Wrong extension type. Acept file ext are: ${allowedExtArr.toString()}`;
-                cb(null, false);
-            }
-            else {
-                const fileSize = parseInt(req.headers['content-length']);
-                if(fileSize > 1024 * 1024 * 5) {
-                    req.fileValidationError = 'File size is too large. Acept fize size is lass than 5 MB';;
+        // Upload image in description
+        @Post('cke-upload')
+        @UseInterceptors(FileInterceptor('upload', {
+            storage:storageConfig('ckeditor'),
+            fileFilter:(req, file, cb) => {
+                const ext = extname(file.originalname);
+                const allowedExtArr = ['.jpg', '.png', '.jpeg'];
+                if(!allowedExtArr.includes(ext)) {
+                    req.fileValidationError = `Wrong extension type. Acept file ext are: ${allowedExtArr.toString()}`;
                     cb(null, false);
                 }
                 else {
-                    cb(null, true);
+                    const fileSize = parseInt(req.headers['content-length']);
+                    if(fileSize > 1024 * 1024 * 5) {
+                        req.fileValidationError = 'File size is too large. Acept fize size is lass than 5 MB';;
+                        cb(null, false);
+                    }
+                    else {
+                        cb(null, true);
+                    }
                 }
             }
-        }
-    }))
+        }))
 
-    ckeUpload(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
-        return {
-            'url':`ckeditor/${file.filename}`
+        ckeUpload(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
+            return {
+                'url':`ckeditor/${file.filename}`
+            }
+        }
+
+        @Post('images')
+        @UseInterceptors(FileInterceptor('image', {storage}))
+        async uploadImage(@UploadedFile() file: Express.Multer.File) {
+        // console.log(file)
+            const result = await this.cloudinaryService.uploadImage(file);
+            return {
+                message: 'Image uploaded successfully!',
+                url: result,
+            };
         }
     }
-}
