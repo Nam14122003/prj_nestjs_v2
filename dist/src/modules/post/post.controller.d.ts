@@ -17,8 +17,4 @@ export declare class PostController {
     ckeUpload(data: any, file: Express.Multer.File): {
         url: string;
     };
-    uploadImage(file: Express.Multer.File): Promise<{
-        message: string;
-        url: import("cloudinary").UploadApiResponse | import("cloudinary").UploadApiErrorResponse;
-    }>;
 }

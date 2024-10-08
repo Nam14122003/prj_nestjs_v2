@@ -38,27 +38,7 @@ export class PostController {
       }
     },
     })
-    @UseInterceptors(FileInterceptor('thumbnail', {
-        storage:storageConfig('post'),
-        fileFilter:(req, file, cb) => {
-            const ext = extname(file.originalname);
-            const allowedExtArr = ['.jpg', '.png', '.jpeg'];
-            if(!allowedExtArr.includes(ext)) {
-                req.fileValidationError = `Wrong extension type. Acept file ext are: ${allowedExtArr.toString()}`;
-                cb(null, false);
-            }
-            else {
-                const fileSize = parseInt(req.headers['content-length']);
-                if(fileSize > 1024 * 1024 * 5) {
-                    req.fileValidationError = 'File size is too large. Acept fize size is lass than 5 MB';;
-                    cb(null, false);
-                }
-                else {
-                    cb(null, true);
-                }
-            }
-        }
-    }))
+    @UseInterceptors(FileInterceptor('image', {storage}))
     create(@Req() req: any, @Body() createPostDto: CreatePostDto, @UploadedFile() file: Express.Multer.File) {
         if(req.fileValidationError) {
             throw new BadRequestException(req.fileValidationError);
@@ -66,7 +46,7 @@ export class PostController {
         if(!file) {
             throw new BadRequestException('File is required!')
         }
-        return this.postService.create(req['user_data'].id, {...createPostDto, thumbnail:file.destination + '/' + file.filename});
+        return this.postService.create(req['user_data'].id, {...createPostDto, thumbnail: file.path})
     }
 
     @UseGuards(AuthGuard)
@@ -153,14 +133,4 @@ export class PostController {
             }
         }
 
-        @Post('images')
-        @UseInterceptors(FileInterceptor('image', {storage}))
-        async uploadImage(@UploadedFile() file: Express.Multer.File) {
-        // console.log(file)
-            const result = await this.cloudinaryService.uploadImage(file);
-            return {
-                message: 'Image uploaded successfully!',
-                url: result,
-            };
-        }
     }

@@ -37,7 +37,7 @@ let PostController = exports.PostController = class PostController {
         if (!file) {
             throw new common_1.BadRequestException('File is required!');
         }
-        return this.postService.create(req['user_data'].id, { ...createPostDto, thumbnail: file.destination + '/' + file.filename });
+        return this.postService.create(req['user_data'].id, { ...createPostDto, thumbnail: file.path });
     }
     findAll(query) {
         return this.postService.findAll(query);
@@ -62,13 +62,6 @@ let PostController = exports.PostController = class PostController {
             'url': `ckeditor/${file.filename}`
         };
     }
-    async uploadImage(file) {
-        const result = await this.cloudinaryService.uploadImage(file);
-        return {
-            message: 'Image uploaded successfully!',
-            url: result,
-        };
-    }
 };
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
@@ -89,28 +82,7 @@ __decorate([
             }
         },
     }),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('thumbnail', {
-        storage: (0, config_1.storageConfig)('post'),
-        fileFilter: (req, file, cb) => {
-            const ext = (0, path_1.extname)(file.originalname);
-            const allowedExtArr = ['.jpg', '.png', '.jpeg'];
-            if (!allowedExtArr.includes(ext)) {
-                req.fileValidationError = `Wrong extension type. Acept file ext are: ${allowedExtArr.toString()}`;
-                cb(null, false);
-            }
-            else {
-                const fileSize = parseInt(req.headers['content-length']);
-                if (fileSize > 1024 * 1024 * 5) {
-                    req.fileValidationError = 'File size is too large. Acept fize size is lass than 5 MB';
-                    ;
-                    cb(null, false);
-                }
-                else {
-                    cb(null, true);
-                }
-            }
-        }
-    })),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', { storage: cloudinary_multer_1.storage })),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.UploadedFile)()),
@@ -205,14 +177,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "ckeUpload", null);
-__decorate([
-    (0, common_1.Post)('images'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', { storage: cloudinary_multer_1.storage })),
-    __param(0, (0, common_1.UploadedFile)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], PostController.prototype, "uploadImage", null);
 exports.PostController = PostController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiTags)('Posts'),
