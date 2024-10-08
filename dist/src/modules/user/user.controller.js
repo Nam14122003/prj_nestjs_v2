@@ -20,10 +20,9 @@ const update_user_dto_1 = require("./dto/update-user.dto");
 const fillter_user_dto_1 = require("./dto/fillter-user.dto");
 const swagger_1 = require("@nestjs/swagger");
 const platform_express_1 = require("@nestjs/platform-express");
-const config_1 = require("../../../helpers/config");
-const path_1 = require("path");
 const role_decorator_1 = require("../auth/decorator/role.decorator");
 const local_auth_guard_1 = require("../auth/jwt/local-auth.guard");
+const cloudinary_multer_1 = require("../../cloudinary/cloudinary.multer");
 let UserController = exports.UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -57,7 +56,7 @@ let UserController = exports.UserController = class UserController {
         if (!file) {
             throw new common_1.BadRequestException('File is required!');
         }
-        this.userService.updateAvatar(req.user_data.id, file.fieldname + '/' + file.fieldname);
+        this.userService.updateAvatar(req.user_data.id, file.path);
     }
 };
 __decorate([
@@ -129,28 +128,7 @@ __decorate([
         },
     }),
     (0, common_1.Post)('upload-avatar'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
-        storage: (0, config_1.storageConfig)('avatar'),
-        fileFilter: (req, file, cb) => {
-            const ext = (0, path_1.extname)(file.originalname);
-            const allowedExtArr = ['.jpg', '.png', '.jpeg'];
-            if (!allowedExtArr.includes(ext)) {
-                req.fileValidationError = `Wrong extension type. Acept file ext are: ${allowedExtArr.toString()}`;
-                cb(null, false);
-            }
-            else {
-                const fileSize = parseInt(req.headers['content-length']);
-                if (fileSize > 1024 * 1024 * 5) {
-                    req.fileValidationError = 'File size is too large. Acept fize size is lass than 5 MB';
-                    ;
-                    cb(null, false);
-                }
-                else {
-                    cb(null, true);
-                }
-            }
-        }
-    })),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', { storage: cloudinary_multer_1.storage1 })),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),

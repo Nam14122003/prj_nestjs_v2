@@ -10,6 +10,7 @@ import { storageConfig } from 'helpers/config';
 import { extname } from 'path';
 import { Roles } from '@/modules/auth/decorator/role.decorator';
 import { LocalAuthGuard } from '@/modules/auth/jwt/local-auth.guard';
+import {storage, storage1} from "@/cloudinary/cloudinary.multer";
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -76,27 +77,7 @@ export class UserController {
     },
     })
     @Post('upload-avatar')
-    @UseInterceptors(FileInterceptor('avatar', {
-        storage: storageConfig('avatar'), 
-        fileFilter:(req, file, cb) => {
-            const ext = extname(file.originalname);
-            const allowedExtArr = ['.jpg', '.png', '.jpeg'];
-            if(!allowedExtArr.includes(ext)) {
-                req.fileValidationError = `Wrong extension type. Acept file ext are: ${allowedExtArr.toString()}`;
-                cb(null, false);
-            }
-            else {
-                const fileSize = parseInt(req.headers['content-length']);
-                if(fileSize > 1024 * 1024 * 5) {
-                    req.fileValidationError = 'File size is too large. Acept fize size is lass than 5 MB';;
-                    cb(null, false);
-                }
-                else {
-                    cb(null, true);
-                }
-            }
-        }
-    }))
+    @UseInterceptors(FileInterceptor('avatar', {storage: storage1}))
     uploadAvatar(@Req() req: any, @UploadedFile() file: Express.Multer.File) {
         if(req.fileValidationError) {
             throw new BadRequestException(req.fileValidationError);
@@ -104,6 +85,6 @@ export class UserController {
         if(!file) {
             throw new BadRequestException('File is required!')
         }
-        this.userService.updateAvatar(req.user_data.id, file.fieldname+'/'+file.fieldname);
+        this.userService.updateAvatar(req.user_data.id, file.path);
     }
 }

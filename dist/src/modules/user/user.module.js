@@ -13,13 +13,15 @@ const user_service_1 = require("./user.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("./entities/user.entity");
 const config_1 = require("@nestjs/config");
+const cloudinary_provider_1 = require("../../cloudinary/cloudinary.provider");
+const cloudinary_service_1 = require("../../cloudinary/cloudinary.service");
 let UserModule = exports.UserModule = class UserModule {
 };
 exports.UserModule = UserModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]), config_1.ConfigModule],
         controllers: [user_controller_1.UserController],
-        providers: [user_service_1.UserService],
+        providers: [user_service_1.UserService, cloudinary_provider_1.CloudinaryProvider, cloudinary_service_1.CloudinaryService],
     })
 ], UserModule);
 //# sourceMappingURL=user.module.js.map
