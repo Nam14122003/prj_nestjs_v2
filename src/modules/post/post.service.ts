@@ -1,19 +1,19 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable, UploadedFiles} from '@nestjs/common';
 import { CreatePostDto } from '@/modules/post/dto/create-post.dto';
 import { Post } from '@/modules/post/entities/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Like, Repository, UpdateOptions, UpdateResult } from 'typeorm';
+import { DeleteResult, Like, Repository, UpdateResult } from 'typeorm';
 import { User } from '@/modules/user/entities/user.entity';
 import { FilterPostDto } from '@/modules/post/dto/filter-post.dto';
 import { UpdatePostDto } from '@/modules/post/dto/update-post.dto';
-import { MailerService } from '@nestjs-modules/mailer';
+
 
 
 @Injectable()
 export class PostService {
     constructor(
         @InjectRepository(User) private useRepository: Repository<User>,
-        @InjectRepository(Post) private postRepository: Repository<Post>
+        @InjectRepository(Post) private postRepository: Repository<Post>,
     ){}
     async create(userId: number, dto: CreatePostDto): Promise<Post> {
       const user = await this.useRepository.findOneBy({id: userId});

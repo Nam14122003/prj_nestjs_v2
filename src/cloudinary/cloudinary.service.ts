@@ -4,7 +4,7 @@ import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 
 @Injectable()
 export class CloudinaryService {
-    async uploadImage(file: Express.Multer.File): Promise<UploadApiResponse | UploadApiErrorResponse> {
+    async uploadImage(file: Express.Multer.File): Promise<any> {
         return new Promise((resolve, reject) => {
             cloudinary.uploader.upload_stream({ folder: 'uploads' }, (error, result) => {
                 // if (error) return reject(error);
