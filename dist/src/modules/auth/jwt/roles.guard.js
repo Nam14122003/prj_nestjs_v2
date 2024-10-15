@@ -17,7 +17,6 @@ let RolesGuard = exports.RolesGuard = class RolesGuard {
         this.reflector = reflector;
     }
     canActivate(context) {
-        console.log("vao RolesGuard");
         const requiredRoles = this.reflector.getAllAndOverride('roles', [
             context.getHandler(),
             context.getClass(),
@@ -25,9 +24,7 @@ let RolesGuard = exports.RolesGuard = class RolesGuard {
         if (!requiredRoles) {
             return true;
         }
-        console.log(requiredRoles);
         const { user } = context.switchToHttp().getRequest();
-        console.log(user);
         return requiredRoles.some(roles => user.roles.split(',').includes(roles));
     }
 };

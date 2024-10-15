@@ -24,6 +24,7 @@ const handlebars_adapter_1 = require("@nestjs-modules/mailer/dist/adapters/handl
 const schedule_1 = require("@nestjs/schedule");
 const event_emitter_1 = require("@nestjs/event-emitter");
 const bull_1 = require("@nestjs/bull");
+const file_module_1 = require("../file/file.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -31,7 +32,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forRoot(data_source_1.dataSourceOptios),
             user_module_1.UserModule, auth_module_1.AuthModule, config_1.ConfigModule.forRoot(),
-            post_module_1.PostModule, category_module_1.CategoryModule,
+            post_module_1.PostModule, category_module_1.CategoryModule, file_module_1.FileModule,
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
             mailer_1.MailerModule.forRootAsync({
                 imports: [config_1.ConfigModule],

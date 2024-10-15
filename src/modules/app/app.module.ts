@@ -15,13 +15,15 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import {ScheduleModule} from "@nestjs/schedule";
 import {EventEmitterModule} from "@nestjs/event-emitter";
 import {BullModule} from "@nestjs/bull";
+import {FileModule} from "@/modules/file/file.module";
+
 
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dataSourceOptios), 
     UserModule, AuthModule, ConfigModule.forRoot(), 
-    PostModule, CategoryModule,
+    PostModule, CategoryModule, FileModule,
     TypeOrmModule.forFeature([User]),
     MailerModule.forRootAsync({
       imports: [ConfigModule],

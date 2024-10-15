@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express'; //Thêm phần này cho phần static file
 import { ConfigService } from '@nestjs/config';
+import "reflect-metadata";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule); //Thêm phần này cho phần static file

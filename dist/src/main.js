@@ -5,6 +5,7 @@ const app_module_1 = require("./modules/app/app.module");
 const swagger_1 = require("@nestjs/swagger");
 const path_1 = require("path");
 const config_1 = require("@nestjs/config");
+require("reflect-metadata");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
