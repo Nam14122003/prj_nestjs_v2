@@ -57,7 +57,7 @@ let FileService = exports.FileService = class FileService {
         }
         const worksheet = XLSX.utils.json_to_sheet(result);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Employees');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Users');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
         res.setHeader('Content-Disposition', 'attachment; filename=' + 'users.xlsx');
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

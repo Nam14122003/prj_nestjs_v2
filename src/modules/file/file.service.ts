@@ -23,7 +23,7 @@ export class FileService {
         // 2. Tạo một bảng tính từ danh sách nhân viên
         const worksheet = XLSX.utils.json_to_sheet(result);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Employees');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Users');
 
         // 3. Xuất workbook ra một buffer
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
