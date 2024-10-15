@@ -38,31 +38,49 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExportController = void 0;
 const common_1 = require("@nestjs/common");
 const XLSX = __importStar(require("xlsx"));
+const typeorm_1 = require("@nestjs/typeorm");
+const user_entity_1 = require("../user/entities/user.entity");
+const typeorm_2 = require("typeorm");
+const swagger_1 = require("@nestjs/swagger");
+const local_auth_guard_1 = require("../auth/jwt/local-auth.guard");
+const role_decorator_1 = require("../auth/decorator/role.decorator");
 let ExportController = exports.ExportController = class ExportController {
-    exportToExcel(res) {
-        const employees = [
-            { name: 'John Doe', email: 'john@example.com', password: '12345' },
-            { name: 'Jane Smith', email: 'jane@example.com', password: '67890' },
-            { name: 'Alice Johnson', email: 'alice@example.com', password: 'abcde' },
-        ];
-        const worksheet = XLSX.utils.json_to_sheet(employees);
+    constructor(userRespository) {
+        this.userRespository = userRespository;
+    }
+    async exportToExcel(res) {
+        const result = [];
+        const users = await this.userRespository.find({
+            select: ['id', 'firstName', 'lastName', 'email', 'roles', 'status', 'createdAt', 'updatedAt', 'codeId', 'avatar', 'refresh_token']
+        });
+        console.log(users);
+        for (const user of users) {
+            if (user.roles == 'User') {
+                result.push(user);
+            }
+        }
+        const worksheet = XLSX.utils.json_to_sheet(result);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Employees');
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-        console.log(excelBuffer);
-        res.setHeader('Content-Disposition', 'attachment; filename=' + 'employees.xlsx');
+        res.setHeader('Content-Disposition', 'attachment; filename=' + 'users.xlsx');
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.send(excelBuffer);
     }
 };
 __decorate([
+    (0, role_decorator_1.Roles)('Admin'),
     (0, common_1.Get)('/excel'),
     __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ExportController.prototype, "exportToExcel", null);
 exports.ExportController = ExportController = __decorate([
-    (0, common_1.Controller)('export')
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
+    (0, common_1.Controller)('export'),
+    __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], ExportController);
 //# sourceMappingURL=file.controller.js.map
