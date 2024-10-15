@@ -1,8 +1,7 @@
-import { Response } from 'express';
-import { User } from "@/modules/user/entities/user.entity";
-import { Repository } from "typeorm";
+import { FileService } from "@/modules/file/file.service";
+import { Response } from "express";
 export declare class ExportController {
-    private userRespository;
-    constructor(userRespository: Repository<User>);
+    private fileService;
+    constructor(fileService: FileService);
     exportToExcel(res: Response): Promise<void>;
 }

@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const file_controller_1 = require("./file.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../user/entities/user.entity");
+const file_service_1 = require("./file.service");
 let FileModule = exports.FileModule = class FileModule {
 };
 exports.FileModule = FileModule = __decorate([
@@ -19,6 +20,7 @@ exports.FileModule = FileModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User])
         ],
         controllers: [file_controller_1.ExportController],
+        providers: [file_service_1.FileService]
     })
 ], FileModule);
 //# sourceMappingURL=file.module.js.map

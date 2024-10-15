@@ -1,47 +1,20 @@
 import {Controller, Get, Res, UseGuards} from '@nestjs/common';
-import * as XLSX from 'xlsx';
-import { Response } from 'express';
-import {InjectRepository} from "@nestjs/typeorm";
-import {User} from "@/modules/user/entities/user.entity";
-import {Repository} from "typeorm";
 import {ApiBearerAuth} from "@nestjs/swagger";
 import {LocalAuthGuard} from "@/modules/auth/jwt/local-auth.guard";
 import {Roles} from "@/modules/auth/decorator/role.decorator";
+import {FileService} from "@/modules/file/file.service";
+import {Response} from "express";
 
 @ApiBearerAuth()
 @UseGuards(LocalAuthGuard)
 @Controller('export')
 export class ExportController {
-    constructor(@InjectRepository(User) private userRespository: Repository<User>) {
+    constructor(private fileService: FileService) {
     }
 
     @Roles('Admin')
     @Get('/excel')
     async exportToExcel(@Res() res: Response) {
-        // 1. Giả sử đây là danh sách nhân viên
-       const result = [];
-       const users = await this.userRespository.find({
-           select: ['id', 'firstName', 'lastName', 'email', 'roles', 'status', 'createdAt', 'updatedAt', 'codeId', 'avatar', 'refresh_token']
-       });
-       for (const user of users) {
-           if (user.roles == 'User') {
-               result.push(user);
-           }
-       }
-        // 2. Tạo một bảng tính từ danh sách nhân viên
-        const worksheet = XLSX.utils.json_to_sheet(result);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Employees');
-
-        // 3. Xuất workbook ra một buffer
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-
-        // 4. Gửi file excel về phía client
-        res.setHeader(
-            'Content-Disposition',
-            'attachment; filename=' + 'users.xlsx',
-        );
-        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.send(excelBuffer);
+        return this.fileService.exportExcel(res);
     }
 }
