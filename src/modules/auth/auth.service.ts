@@ -14,9 +14,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 import {Cron} from "@nestjs/schedule";
 import {EventEmitter2} from "@nestjs/event-emitter";
 
-
-
-
 @Injectable()
 export class AuthService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>,
@@ -117,7 +114,7 @@ export class AuthService {
         return {access_token, refresh_token};
     }
 
-    private async hashPassword(password: string): Promise<string> {
+    async hashPassword(password: string): Promise<string> {
         const saltRound = 10;
         const salt = await bcrypt.genSalt(saltRound);
         const hash = await bcrypt.hash(password, salt);

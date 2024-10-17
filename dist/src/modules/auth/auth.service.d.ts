@@ -18,7 +18,7 @@ export declare class AuthService {
     login(dto: LoginUserDto): Promise<any>;
     refreshToken(refresh_token: string): Promise<any>;
     private generateToken;
-    private hashPassword;
+    hashPassword(password: string): Promise<string>;
     checkCode(dto: CodeAuthDto): Promise<any>;
     verifyActive(dto: UpdateCodeAuthDto): Promise<any>;
     retryPassword(dto: UpdatePasswordAuthDto): Promise<any>;

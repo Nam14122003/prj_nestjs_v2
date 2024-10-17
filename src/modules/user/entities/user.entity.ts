@@ -42,6 +42,6 @@ export class User {
   @CreateDateColumn()
   codeExpired:Date;
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.user, { onDelete: "CASCADE"})
   posts: Post[]
 }

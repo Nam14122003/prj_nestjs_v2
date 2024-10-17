@@ -41,9 +41,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../user/entities/user.entity");
 const typeorm_2 = require("typeorm");
 const XLSX = __importStar(require("xlsx"));
+const uuid_1 = require("uuid");
+const otplib_1 = require("otplib");
+const auth_service_1 = require("../auth/auth.service");
 let FileService = exports.FileService = class FileService {
-    constructor(userRespository) {
+    constructor(userRespository, authService) {
         this.userRespository = userRespository;
+        this.authService = authService;
     }
     async exportExcel(res) {
         const result = [];
@@ -63,10 +67,35 @@ let FileService = exports.FileService = class FileService {
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.send(excelBuffer);
     }
+    async importUsersFromExcel(filePath) {
+        const workbook = XLSX.readFile(filePath);
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const data = XLSX.utils.sheet_to_json(sheet);
+        for (const row of data) {
+            const user = new user_entity_1.User();
+            user.firstName = row['firstName'];
+            user.lastName = row['lastName'];
+            user.email = row['email'];
+            user.password = await this.authService.hashPassword(row['password']);
+            user.refresh_token = row['refresh_token'];
+            user.avatar = row['avatar'];
+            user.status = row['status'];
+            user.roles = row['roles'];
+            const tmp = (0, uuid_1.v4)();
+            otplib_1.authenticator.options = { digits: 6, step: 120 };
+            const secret = otplib_1.totp.generate(tmp);
+            user.codeId = secret;
+            user.createdAt = new Date();
+            user.updatedAt = new Date();
+            await this.userRespository.save(user);
+        }
+    }
 };
 exports.FileService = FileService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        auth_service_1.AuthService])
 ], FileService);
 //# sourceMappingURL=file.service.js.map

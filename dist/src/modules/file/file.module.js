@@ -12,15 +12,20 @@ const file_controller_1 = require("./file.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../user/entities/user.entity");
 const file_service_1 = require("./file.service");
+const auth_service_1 = require("../auth/auth.service");
+const config_1 = require("@nestjs/config");
+const auth_module_1 = require("../auth/auth.module");
 let FileModule = exports.FileModule = class FileModule {
 };
 exports.FileModule = FileModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User])
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
+            auth_module_1.AuthModule,
+            config_1.ConfigModule
         ],
         controllers: [file_controller_1.ExportController],
-        providers: [file_service_1.FileService]
+        providers: [file_service_1.FileService, auth_service_1.AuthService, config_1.ConfigService]
     })
 ], FileModule);
 //# sourceMappingURL=file.module.js.map

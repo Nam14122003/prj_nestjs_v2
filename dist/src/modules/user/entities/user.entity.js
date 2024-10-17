@@ -67,7 +67,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "codeExpired", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => post_entity_1.Post, (post) => post.user),
+    (0, typeorm_1.OneToMany)(() => post_entity_1.Post, (post) => post.user, { onDelete: "CASCADE" }),
     __metadata("design:type", Array)
 ], User.prototype, "posts", void 0);
 exports.User = User = __decorate([

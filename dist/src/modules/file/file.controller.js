@@ -18,12 +18,19 @@ const swagger_1 = require("@nestjs/swagger");
 const local_auth_guard_1 = require("../auth/jwt/local-auth.guard");
 const role_decorator_1 = require("../auth/decorator/role.decorator");
 const file_service_1 = require("./file.service");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const path_1 = require("path");
 let ExportController = exports.ExportController = class ExportController {
     constructor(fileService) {
         this.fileService = fileService;
     }
     async exportToExcel(res) {
         return this.fileService.exportExcel(res);
+    }
+    async importUsers(file) {
+        await this.fileService.importUsersFromExcel(file.path);
+        return { message: 'File uploaded and data imported successfully' };
     }
 };
 __decorate([
@@ -34,10 +41,31 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ExportController.prototype, "exportToExcel", null);
+__decorate([
+    (0, role_decorator_1.Roles)('Admin'),
+    (0, common_1.Post)('/import-file'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads',
+            filename: (req, file, cb) => {
+                const randomName = Array(32)
+                    .fill(null)
+                    .map(() => Math.round(Math.random() * 16).toString(16))
+                    .join('');
+                cb(null, `${randomName}${(0, path_1.extname)(file.originalname)}`);
+            },
+        }),
+    })),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ExportController.prototype, "importUsers", null);
 exports.ExportController = ExportController = __decorate([
+    (0, swagger_1.ApiTags)('File'),
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
-    (0, common_1.Controller)('export'),
+    (0, common_1.Controller)('file'),
     __metadata("design:paramtypes", [file_service_1.FileService])
 ], ExportController);
 //# sourceMappingURL=file.controller.js.map
